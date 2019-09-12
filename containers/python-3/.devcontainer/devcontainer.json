@@ -14,10 +14,10 @@
 	},
 
 	// Uncomment the next line if you want to publish any ports.
-	// "appPort": [],
+	"appPort": [ "65522:22" ],
 
 	// Uncomment the next line to run commands after the container is created.
-	// "postCreateCommand": "pip install -r requirements.txt",
+	"postCreateCommand": "[ -f requirements.txt ] && sudo pip install -r requirements.txt || sudo ./start.sh",
 
 	// Uncomment the next line to use a non-root user. On Linux, this will prevent
 	// new files getting created as root, but you may need to update the USER_UID

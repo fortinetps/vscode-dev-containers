@@ -43,12 +43,24 @@ RUN apt-get update \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     #
+    ######################################
+    # Install and configure openssh-server
+    && apt-get install -y openssh-server \
+    && mkdir /var/run/sshd \
+    && echo 'vscode:PASSWORD_FOR_USER_VSCODE' | chpasswd \
+    && sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
+    ######################################
+    #
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+#############################
+# Expose SSH port 22
+EXPOSE 22
+#############################
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
-
-
